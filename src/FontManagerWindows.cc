@@ -179,7 +179,7 @@ ResultSet *getAvailableFonts() {
 
   // track postscript names we've already added
   // using a set so we don't get any duplicates.
-  // std::unordered_set<std::string> psNames;
+  std::array<std::string> psNames;
 
   for (int i = 0; i < familyCount; i++) {
     IDWriteFontFamily *family = NULL;
