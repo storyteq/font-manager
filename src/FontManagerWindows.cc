@@ -179,7 +179,7 @@ ResultSet *getAvailableFonts() {
 
   // track postscript names we've already added
   // using a set so we don't get any duplicates.
-  // std::unordered_set<std::string> psNames;
+  std::unordered_set<std::string> psPathes;
   //std::array<std::string, fullCount> psNames;
 
   for (int i = 0; i < familyCount; i++) {
@@ -193,11 +193,11 @@ ResultSet *getAvailableFonts() {
       IDWriteFont *font = NULL;
       HR(family->GetFont(j, &font));
 
-      //FontDescriptor *result = resultFromFont(font);
-      //if (psNames.count(result->postscriptName) == 0) {
-      res->push_back(resultFromFont(font));
-      //  psNames.insert(result->postscriptName);
-     // }
+      FontDescriptor *result = resultFromFont(font);
+      if (psPathes.count(result->path) == 0) {
+        res->push_back(resultFromFont(font));
+        psPathes.insert(result->path);
+      }
     }
 
     family->Release();
@@ -217,6 +217,9 @@ bool resultMatches(FontDescriptor *result, FontDescriptor *desc) {
     return false;
 
   if (desc->style && strcmp(desc->style, result->style) != 0)
+    return false;
+
+  if (desc->path && strcmp(desc->path, result->path) != 0)
     return false;
 
   if (desc->weight && desc->weight != result->weight)
