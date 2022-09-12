@@ -177,9 +177,16 @@ ResultSet *getAvailableFonts() {
   // Get the number of font families in the collection.
   int familyCount = collection->GetFontFamilyCount();
 
+  int fullCount = 0;
+  for (int i = 0; i < familyCount; i++) {
+    int fontCount = family->GetFontCount();
+    fullCount = fullCount + fontCount;
+  }
+
   // track postscript names we've already added
   // using a set so we don't get any duplicates.
-  std::array<std::string> psNames;
+  // std::unordered_set<std::string> psNames;
+  std::array<std::string, fullCount> psNames;
 
   for (int i = 0; i < familyCount; i++) {
     IDWriteFontFamily *family = NULL;
